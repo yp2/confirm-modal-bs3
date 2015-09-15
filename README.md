@@ -1,7 +1,14 @@
 Simple Bootstrap 3 Confirm Dialog
 ---------------------------------
 
-### Usage
+Installation
+```
+meteor add yp2:confirm-modal-bs3
+```
+
+Usage
+-----
+
 In template - html add this:
 
 ```html
