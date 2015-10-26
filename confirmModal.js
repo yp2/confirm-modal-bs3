@@ -15,6 +15,9 @@ if (Meteor.isClient) {
         },
         getModalTitle: function () {
             return Template.instance().modalTitle;
+        },
+        getModalBodyIsTemplate: function () {
+            return Template.instance().modalBodyIsTemplate;
         }
     });
 
@@ -49,7 +52,9 @@ if (Meteor.isClient) {
         self.cancelActionCallbacks = [];
         self.confirmActionCallbacks = [];
         self.modalBody = self.data.data.modalBody || "Body to implement";
+        self.modalBodyIsTemplate = self.data.data.modalBodyIsTemplate || false;
         self.modalTitle = self.data.data.modalTitle || "Title to implement";
+        self.hideOnSuccess = self.data.data.hideOnSuccess;
 
         // cancelActionCallbacks
         if (typeof self.data.data.cancelAction === "function") {
@@ -85,12 +90,14 @@ if (Meteor.isClient) {
             }
         );
 
-        self.confirmActionCallbacks.push(
-            function (e, t) {
-                console.log('confirm hide');
-                $("#" + self.htmlModalId).modal('hide')
-            }
-        );
+        if (self.hideOnSuccess) {
+            self.confirmActionCallbacks.push(
+                function (e, t) {
+                    console.log('confirm hide');
+                    $("#" + self.htmlModalId).modal('hide')
+                }
+            );
+        }
 
         self.onHideCallbacks.push(
             function (e, t) {

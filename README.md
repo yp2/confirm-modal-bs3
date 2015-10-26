@@ -33,6 +33,8 @@ Template.foo.helpers({
             template: Template.foo,					// refernece to parent template
             modalTitle: "Modal title",
             modalBody: 'Modal body',				// safe for html
+            modalBodyIsTemplate: false              // boolean if true modalBody will by pass as name to Template.dynamic
+            hideOnSuccess: true                     // boolean if true modal will hide after invoking all confirmAction callbacks
             onShow: function (event, template) {	// on show modal callback or array of functions
             	console.log('on show callback');
             },

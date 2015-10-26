@@ -7,7 +7,11 @@
                     <h4 class="modal-title" id="confirmModal{{getModalId}}Label">{{getModalTitle}}</h4>
                 </div>
                 <div class="modal-body">
-                    {{{getModalBody}}}
+                    {{# unless getModalBodyIsTemplate  }}
+                        {{{getModalBody}}}
+                    {{ else }}
+                        {{> Template.dynamic template=getModalBody }}
+                    {{/ unless }}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default confirm-modal-cancel-btn">{{getCancelBtnLabel}}</button>
