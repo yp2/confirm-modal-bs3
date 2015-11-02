@@ -48,6 +48,7 @@ if (Meteor.isClient) {
         self.htmlModalId = "confirmModal" + self.modalId;
         self.dataTemplate = self.data.data.template;
         self.onShowCallbacks = [];
+        self.onShownCallbacks = [];
         self.onHideCallbacks = [];
         self.cancelActionCallbacks = [];
         self.confirmActionCallbacks = [];
@@ -55,6 +56,9 @@ if (Meteor.isClient) {
         self.modalBodyIsTemplate = self.data.data.modalBodyIsTemplate || false;
         self.modalTitle = self.data.data.modalTitle || "Title to implement";
         self.hideOnSuccess = self.data.data.hideOnSuccess;
+
+        //element data attributes
+        // self.elementData - accessible after click event on buttons
 
         // cancelActionCallbacks
         if (typeof self.data.data.cancelAction === "function") {
@@ -77,6 +81,13 @@ if (Meteor.isClient) {
             self.onShowCallbacks = self.data.data.onShow;
         }
 
+        // shown.bs.modal callbacks
+        if (typeof self.data.data.onShown === "function") {
+            self.onShownCallbacks.push(self.data.data.onShown);
+        } else if (self.data.data.onShow instanceof Array) {
+            self.onShownCallbacks = self.data.data.onShown;
+        }
+
         // hide.bs.modal callbacks
         if (typeof self.data.data.onHide === "function") {
             self.onHideCallbacks.push(self.data.data.onHide);
@@ -93,7 +104,6 @@ if (Meteor.isClient) {
         if (self.hideOnSuccess) {
             self.confirmActionCallbacks.push(
                 function (e, t) {
-                    console.log('confirm hide');
                     $("#" + self.htmlModalId).modal('hide')
                 }
             );
@@ -122,6 +132,12 @@ if (Meteor.isClient) {
                 self.onShowCallbacks[i](e, t);
             }
         };
+        modalEvents['shown.bs.modal #' + self.htmlModalId] = function (e, t) {
+            //run callbacks
+            for (var i = 0; i < self.onShownCallbacks.length; i++) {
+                self.onShownCallbacks[i](e, t);
+            }
+        };
 
         Template.confirmModal.events(modalEvents);
 
@@ -130,9 +146,11 @@ if (Meteor.isClient) {
         //parentEvents['click .confirm-modal-btn-' + self.modalId] = function(e, t) {
         parentEvents['click .confirm-modal-btn'] = function (e, t) {
             e.preventDefault();
-            t['showConfirmModal' + $(e.currentTarget).data().id].set(true)
+            var element = $(e.currentTarget);
+            self.elementData = element.data();
+            t['showConfirmModal' + element.data().id].set(true);
         };
-
+        
         self.dataTemplate.events(parentEvents);
     });
 
