@@ -1,6 +1,6 @@
 Package.describe({
   name: 'yp2:confirm-modal-bs3',
-  version: '1.1.0',
+  version: '1.1.1',
   // Brief, one-line summary of the package.
   summary: 'Simple Bootstrap 3 confirm modal',
   // URL to the Git repository containing the source code for this package.
